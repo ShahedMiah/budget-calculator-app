@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { DollarSign, Tag, FileText } from 'lucide-react';
 
 type TransactionFormData = {
   type: 'income' | 'expense';
@@ -18,45 +19,70 @@ export default function TransactionForm({ onSubmit }: { onSubmit: (data: Transac
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Type</label>
-        <select {...register('type')} className="mt-1 block w-full rounded-md border border-gray-300 p-2">
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
+          <div className="relative">
+            <select 
+              {...register('type')} 
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2.5 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Tag className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              {...register('category')}
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-4 py-2.5 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+              placeholder="e.g., Salary, Rent"
+            />
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Category</label>
-        <input
-          type="text"
-          {...register('category')}
-          className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-        />
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Amount</label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <DollarSign className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="number"
+            step="0.01"
+            {...register('amount', { valueAsNumber: true })}
+            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-4 py-2.5 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+            placeholder="0.00"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Amount</label>
-        <input
-          type="number"
-          step="0.01"
-          {...register('amount', { valueAsNumber: true })}
-          className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
-        <input
-          type="text"
-          {...register('description')}
-          className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-        />
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FileText className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            {...register('description')}
+            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-4 py-2.5 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Enter description"
+          />
+        </div>
       </div>
 
       <button
         type="submit"
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
       >
         Add Transaction
       </button>
