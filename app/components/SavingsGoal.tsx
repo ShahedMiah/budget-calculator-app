@@ -4,9 +4,10 @@ import { Target } from 'lucide-react';
 type SavingsGoalProps = {
   target: number;
   current: number;
+  formatMoney: (amount: number) => string;
 };
 
-export default function SavingsGoal({ target, current }: SavingsGoalProps) {
+export default function SavingsGoal({ target, current, formatMoney }: SavingsGoalProps) {
   const progress = Math.min((current / target) * 100, 100);
 
   return (
@@ -22,12 +23,12 @@ export default function SavingsGoal({ target, current }: SavingsGoalProps) {
         <div className="flex justify-between text-sm">
           <span className="text-gray-600 dark:text-gray-400">Current: 
             <span className="text-gray-900 dark:text-white font-medium">
-              ${current.toFixed(2)}
+              {formatMoney(current)}
             </span>
           </span>
           <span className="text-gray-600 dark:text-gray-400">Target: 
             <span className="text-gray-900 dark:text-white font-medium">
-              ${target.toFixed(2)}
+              {formatMoney(target)}
             </span>
           </span>
         </div>
@@ -49,7 +50,7 @@ export default function SavingsGoal({ target, current }: SavingsGoalProps) {
         </div>
 
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          ${(target - current).toFixed(2)} left to reach your goal
+          {formatMoney(target - current)} left to reach your goal
         </p>
       </div>
     </div>
