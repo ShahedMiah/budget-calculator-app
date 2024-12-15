@@ -5,6 +5,8 @@ import TransactionForm from './components/TransactionForm';
 import BudgetSummary from './components/BudgetSummary';
 import SavingsGoal from './components/SavingsGoal';
 import ExpenseBreakdown from './components/ExpenseBreakdown';
+import Settings from './components/Settings';
+import { useCurrency } from './hooks/useCurrency';
 
 type Transaction = {
   type: 'income' | 'expense';
@@ -20,6 +22,7 @@ export default function Home() {
     target: 5000,
     current: 2500
   });
+  const { currency, setCurrency, formatMoney } = useCurrency();
 
   const handleTransaction = (transaction: Transaction) => {
     setTransactions([...transactions, { ...transaction, date: new Date() }]);
@@ -46,19 +49,19 @@ export default function Home() {
           <div className="lg:col-span-2 space-y-8">
             {/* Summary Cards */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-              <BudgetSummary transactions={transactions} />
+              <BudgetSummary transactions={transactions} formatMoney={formatMoney} />
             </div>
 
             {/* Transaction Form */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Add Transaction</h2>
-              <TransactionForm onSubmit={handleTransaction} />
+              <TransactionForm onSubmit={handleTransaction} currencySymbol={formatMoney(0).charAt(0)} />
             </div>
 
             {/* Expense Breakdown */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Expense Categories</h2>
-              <ExpenseBreakdown transactions={transactions} />
+              <ExpenseBreakdown transactions={transactions} formatMoney={formatMoney} />
             </div>
           </div>
 
@@ -69,6 +72,7 @@ export default function Home() {
               <SavingsGoal
                 target={savingsGoal.target}
                 current={savingsGoal.current}
+                formatMoney={formatMoney}
               />
             </div>
 
@@ -101,7 +105,7 @@ export default function Home() {
                             ? 'text-green-600 dark:text-green-400' 
                             : 'text-red-600 dark:text-red-400'}`}
                         >
-                          {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                          {t.type === 'income' ? '+' : '-'}{formatMoney(t.amount)}
                         </p>
                       </div>
                     </div>
@@ -112,6 +116,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Settings */}
+      <Settings currency={currency} setCurrency={setCurrency} />
     </div>
   );
 }
