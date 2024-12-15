@@ -30,27 +30,46 @@ export default function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps
   // Sort by amount (highest to lowest)
   categoryPercentages.sort((a, b) => b.amount - a.amount);
 
+  const getGradientColor = (index: number, total: number) => {
+    const hue = (index / total) * 255;
+    return `hsla(${hue}, 70%, 50%, 0.8)`;
+  };
+
   return (
     <div className="space-y-4">
-      {categoryPercentages.map(({ category, amount, percentage }) => (
-        <div key={category}>
-          <div className="flex justify-between text-sm text-gray-600 mb-1">
-            <span>{category}</span>
-            <span>${amount.toFixed(2)} ({percentage.toFixed(1)}%)</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${percentage}%` }}
-            />
-          </div>
-        </div>
-      ))}
-
-      {categoryPercentages.length === 0 && (
-        <p className="text-gray-500 text-center py-4">
+      {categoryPercentages.length === 0 ? (
+        <p className="text-gray-500 dark:text-gray-400 text-center py-8">
           No expenses recorded yet
         </p>
+      ) : (
+        <div className="space-y-4">
+          {categoryPercentages.map(({ category, amount, percentage }, index) => (
+            <div key={category} className="space-y-2">
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-medium text-gray-900 dark:text-white">{category}</span>
+                <div className="text-right">
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    ${amount.toFixed(2)}
+                  </span>
+                  <span className="ml-2 text-gray-500 dark:text-gray-400">
+                    ({percentage.toFixed(1)}%)
+                  </span>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="overflow-hidden h-2 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
+                  <div
+                    style={{
+                      width: `${percentage}%`,
+                      backgroundColor: getGradientColor(index, categoryPercentages.length)
+                    }}
+                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center transition-all duration-500"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
