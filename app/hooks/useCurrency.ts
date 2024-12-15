@@ -15,6 +15,7 @@ export type CurrencyCode = keyof typeof CURRENCY_MAP;
 
 export function useCurrency() {
   const [currency, setCurrency] = useState<CurrencyCode>('USD');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Load saved currency from localStorage on mount
@@ -22,6 +23,7 @@ export function useCurrency() {
     if (savedCurrency && savedCurrency in CURRENCY_MAP) {
       setCurrency(savedCurrency);
     }
+    setIsLoading(false);
   }, []);
 
   const updateCurrency = (newCurrency: CurrencyCode) => {
@@ -37,6 +39,7 @@ export function useCurrency() {
     currency,
     setCurrency: updateCurrency,
     formatMoney,
-    currencySymbol: CURRENCY_MAP[currency]
+    currencySymbol: CURRENCY_MAP[currency],
+    isLoading
   };
 }
