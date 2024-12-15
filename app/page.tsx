@@ -11,6 +11,7 @@ type Transaction = {
   category: string;
   amount: number;
   description: string;
+  date: Date;
 };
 
 export default function Home() {
@@ -21,69 +22,91 @@ export default function Home() {
   });
 
   const handleTransaction = (transaction: Transaction) => {
-    setTransactions([...transactions, transaction]);
+    setTransactions([...transactions, { ...transaction, date: new Date() }]);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
-          Budget Calculator
-        </h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Budget Calculator
+          </h1>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Track your income, expenses, and savings goals
+          </p>
+        </div>
+      </div>
 
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Add Transaction</h2>
-              <TransactionForm onSubmit={handleTransaction} />
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Budget Summary</h2>
+            {/* Summary Cards */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <BudgetSummary transactions={transactions} />
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Expense Categories</h2>
+            {/* Transaction Form */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Add Transaction</h2>
+              <TransactionForm onSubmit={handleTransaction} />
+            </div>
+
+            {/* Expense Breakdown */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Expense Categories</h2>
               <ExpenseBreakdown transactions={transactions} />
             </div>
           </div>
 
           {/* Right Column */}
           <div className="space-y-8">
-            <div className="bg-white rounded-lg shadow p-6">
+            {/* Savings Goal */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
               <SavingsGoal
                 target={savingsGoal.target}
                 current={savingsGoal.current}
               />
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
-              <div className="space-y-2">
-                {transactions.slice().reverse().slice(0, 5).map((t, index) => (
-                  <div
-                    key={index}
-                    className={`p-3 rounded-lg ${
-                      t.type === 'income' ? 'bg-green-50' : 'bg-red-50'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="font-medium">{t.category}</p>
-                        <p className="text-sm text-gray-600">{t.description}</p>
+            {/* Recent Transactions */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Recent Transactions</h2>
+              <div className="space-y-3">
+                {transactions.length === 0 ? (
+                  <p className="text-gray-500 dark:text-gray-400 text-center py-4">
+                    No transactions yet
+                  </p>
+                ) : (
+                  transactions.slice().reverse().slice(0, 5).map((t, index) => (
+                    <div
+                      key={index}
+                      className={`p-4 rounded-lg border ${t.type === 'income' 
+                        ? 'border-green-100 bg-green-50 dark:border-green-900 dark:bg-green-900/20' 
+                        : 'border-red-100 bg-red-50 dark:border-red-900 dark:bg-red-900/20'}`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">{t.category}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{t.description}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                            {new Date(t.date).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <p
+                          className={`font-semibold ${t.type === 'income' 
+                            ? 'text-green-600 dark:text-green-400' 
+                            : 'text-red-600 dark:text-red-400'}`}
+                        >
+                          {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                        </p>
                       </div>
-                      <p
-                        className={`font-semibold ${
-                          t.type === 'income' ? 'text-green-600' : 'text-red-600'
-                        }`}
-                      >
-                        {t.type === 'income' ? '+' : '-'}${t.amount}
-                      </p>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
