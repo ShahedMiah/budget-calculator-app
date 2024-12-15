@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Budget Calculator
@@ -45,18 +45,18 @@ export default function Home() {
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-8">
             {/* Summary Cards */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <BudgetSummary transactions={transactions} />
             </div>
 
             {/* Transaction Form */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Add Transaction</h2>
               <TransactionForm onSubmit={handleTransaction} />
             </div>
 
             {/* Expense Breakdown */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Expense Categories</h2>
               <ExpenseBreakdown transactions={transactions} />
             </div>
@@ -65,7 +65,7 @@ export default function Home() {
           {/* Right Column */}
           <div className="space-y-8">
             {/* Savings Goal */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
               <SavingsGoal
                 target={savingsGoal.target}
                 current={savingsGoal.current}
@@ -73,7 +73,7 @@ export default function Home() {
             </div>
 
             {/* Recent Transactions */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Recent Transactions</h2>
               <div className="space-y-3">
                 {transactions.length === 0 ? (
@@ -84,9 +84,9 @@ export default function Home() {
                   transactions.slice().reverse().slice(0, 5).map((t, index) => (
                     <div
                       key={index}
-                      className={`p-4 rounded-lg border ${t.type === 'income' 
-                        ? 'border-green-100 bg-green-50 dark:border-green-900 dark:bg-green-900/20' 
-                        : 'border-red-100 bg-red-50 dark:border-red-900 dark:bg-red-900/20'}`}
+                      className={`p-4 rounded-lg ${t.type === 'income' 
+                        ? 'bg-green-50 dark:bg-green-900/20' 
+                        : 'bg-red-50 dark:bg-red-900/20'}`}
                     >
                       <div className="flex justify-between items-start">
                         <div>
