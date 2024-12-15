@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowUpCircle, ArrowDownCircle, Wallet } from 'lucide-react';
 
 type Transaction = {
   type: 'income' | 'expense';
@@ -8,9 +9,10 @@ type Transaction = {
 
 type BudgetSummaryProps = {
   transactions: Transaction[];
+  formatMoney: (amount: number) => string;
 };
 
-export default function BudgetSummary({ transactions }: BudgetSummaryProps) {
+export default function BudgetSummary({ transactions, formatMoney }: BudgetSummaryProps) {
   const totalIncome = transactions
     .filter(t => t.type === 'income')
     .reduce((sum, t) => sum + t.amount, 0);
@@ -22,22 +24,47 @@ export default function BudgetSummary({ transactions }: BudgetSummaryProps) {
   const balance = totalIncome - totalExpenses;
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      <div className="bg-green-100 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold text-green-800">Income</h3>
-        <p className="text-2xl font-bold text-green-600">${totalIncome.toFixed(2)}</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="rounded-xl border border-green-100 dark:border-green-900 bg-green-50 dark:bg-green-900/20 p-6">
+        <div className="flex items-center gap-4">
+          <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/40">
+            <ArrowUpCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-green-600 dark:text-green-400">Total Income</p>
+            <p className="text-2xl font-bold text-green-700 dark:text-green-300">
+              {formatMoney(totalIncome)}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="bg-red-100 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold text-red-800">Expenses</h3>
-        <p className="text-2xl font-bold text-red-600">${totalExpenses.toFixed(2)}</p>
+      <div className="rounded-xl border border-red-100 dark:border-red-900 bg-red-50 dark:bg-red-900/20 p-6">
+        <div className="flex items-center gap-4">
+          <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/40">
+            <ArrowDownCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-red-600 dark:text-red-400">Total Expenses</p>
+            <p className="text-2xl font-bold text-red-700 dark:text-red-300">
+              {formatMoney(totalExpenses)}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className={`p-4 rounded-lg ${balance >= 0 ? 'bg-blue-100' : 'bg-yellow-100'}`}>
-        <h3 className="text-lg font-semibold text-gray-800">Balance</h3>
-        <p className={`text-2xl font-bold ${balance >= 0 ? 'text-blue-600' : 'text-yellow-600'}`}>
-          ${balance.toFixed(2)}
-        </p>
+      <div className="rounded-xl border border-blue-100 dark:border-blue-900 bg-blue-50 dark:bg-blue-900/20 p-6">
+        <div className="flex items-center gap-4">
+          <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40">
+            <Wallet className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Balance</p>
+            <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+              {formatMoney(balance)}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
