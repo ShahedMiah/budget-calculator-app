@@ -22,11 +22,21 @@ export default function Home() {
     target: 5000,
     current: 2500
   });
-  const { currency, setCurrency, formatMoney } = useCurrency();
+  const { currency, setCurrency, formatMoney, isLoading } = useCurrency();
 
   const handleTransaction = (transaction: Transaction) => {
     setTransactions([...transactions, { ...transaction, date: new Date() }]);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-pulse text-gray-600 dark:text-gray-300">
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
