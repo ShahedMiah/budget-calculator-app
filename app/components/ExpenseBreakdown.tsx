@@ -8,9 +8,10 @@ type Transaction = {
 
 type ExpenseBreakdownProps = {
   transactions: Transaction[];
+  formatMoney: (amount: number) => string;
 };
 
-export default function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
+export default function ExpenseBreakdown({ transactions, formatMoney }: ExpenseBreakdownProps) {
   const expenses = transactions.filter(t => t.type === 'expense');
   const totalExpenses = expenses.reduce((sum, t) => sum + t.amount, 0);
 
@@ -49,7 +50,7 @@ export default function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps
                 <span className="font-medium text-gray-900 dark:text-white">{category}</span>
                 <div className="text-right">
                   <span className="font-medium text-gray-900 dark:text-white">
-                    ${amount.toFixed(2)}
+                    {formatMoney(amount)}
                   </span>
                   <span className="ml-2 text-gray-500 dark:text-gray-400">
                     ({percentage.toFixed(1)}%)
